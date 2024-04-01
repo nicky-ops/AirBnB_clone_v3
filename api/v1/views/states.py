@@ -10,7 +10,7 @@ from models.state import State
 
 @app_views.route('/states', methods=['GET'], strict_slashes=False)
 def states():
-    '''RETRIEVE THE LIST OF ALL STATE OBJECTS'''
+    '''RETRIEVE THE LIST OF ALL State OBJECTS'''
     obj_lst = [obj.to_dict() for obj in storage.all(State).values()]
     return jsonify(obj_lst)
 
@@ -33,10 +33,10 @@ def delete_state(state_id):
     state = storage.get(State, state_id)
     if state:
         state.delete()
+        storage.save()
+        return jsonify({}), 200
     else:
         abort(404)
-    storage.save()
-    return jsonify({}), 200
 
 
 @app_views.route('/states', methods=['POST'],
@@ -47,8 +47,8 @@ def create_state():
         abort(400, 'Not a JSON')
     if 'name' not in request.json:
         abort(400, 'Missing name')
-    state_data = request.get_json()
-    state = State(**state_data)
+    user_data = request.get_json()
+    state = State(**user_data)
     storage.new(state)
     storage.save()
     return jsonify(state.to_dict()), 201
@@ -64,7 +64,7 @@ def update_state(state_id):
         abort(400, 'Not a JSON')
     if state:
         for key, value in data.items():
-            if key not in ['id', 'creates_at', 'updated_at']:
+            if key not in ['id', 'created_at', 'updated_at']:
                 setattr(state, key, value)
     else:
         abort(404)
