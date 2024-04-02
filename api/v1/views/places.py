@@ -76,7 +76,8 @@ def update_place(city_id):
         abort(400, 'Not a JSON')
     if place:
         for key, value in data.items():
-            if key not in ['id', 'user_id', 'city_id', 'created_at', 'updated_at']:
+            if key not in ['id', 'user_id', 'city_id', 'created_at',
+                           'updated_at']:
                 setattr(place, key, value)
     else:
         abort(404)
