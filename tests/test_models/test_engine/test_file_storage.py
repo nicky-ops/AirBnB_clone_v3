@@ -117,8 +117,9 @@ class TestFileStorage(unittest.TestCase):
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_get(self):
         """Test that get retrieves an item in db properly"""
-        self.assertIs(type(models.storage.get(State,
-                                              0efd822f-8e9d-4d2e-a957-3c3270b98baa).to_dict()), dict)
+        state_id = "0efd822f-8e9d-4d2e-a957-3c3270b98baa"
+        my_dict = models.storage.get(State, state_id).to_dict()
+        self.assertIs(type(my_dict), dict)
 
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_count(self):
